@@ -106,26 +106,46 @@ class Lead extends AbstractModel
      * Метод позволяет обновлять данные по уже существующим сделкам
      *
      * @link https://developers.amocrm.ru/rest_api/leads_set.php
-     * @param int $id Уникальный идентификатор сделки
+     * @param int|array $id Уникальный идентификатор сделки
      * @param string $modified Дата последнего изменения данной сущности
      * @return bool Флаг успешности выполнения запроса
      * @throws \AmoCRM\Exception
      */
     public function apiUpdate($id, $modified = 'now')
     {
-        $this->checkId($id);
+        $parameters = [
+            'leads' => [
+                'update' => [],
+            ],
+        ];
+        $ids = is_array($id)? $id : [$id];
+        foreach ($ids as $id){
+            $this->checkId($id);
+            $lead = $this->getValues();
+            $lead['id'] = $id;
+            $lead['last_modified'] = strtotime($modified);
 
+            $parameters['leads']['update'][] = $lead;
+        }
+
+        $response = $this->postRequest('/private/api/v2/json/leads/set', $parameters);
+
+        return empty($response['leads']['update']['errors']);
+    }
+
+    public function batchUpdate(Lead $leads, $modified = 'now')
+    {
         $parameters = [
             'leads' => [
                 'update' => [],
             ],
         ];
 
-        $lead = $this->getValues();
-        $lead['id'] = $id;
-        $lead['last_modified'] = strtotime($modified);
-
-        $parameters['leads']['update'][] = $lead;
+        foreach ($leads as $lead){
+            $leadData = $lead->getValues();
+            $leadData['last_modified'] = strtotime($modified);
+            $parameters['leads']['update'][] = $leadData;
+        }
 
         $response = $this->postRequest('/private/api/v2/json/leads/set', $parameters);
 
