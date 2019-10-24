@@ -1,5 +1,5 @@
 {
-    "name": "dotzero/amocrm",
+    "name": "ushakovme/amocrm",
     "description": "Удобный и быстрый клиент для работы с API amoCRM",
     "license": "MIT",
     "keywords": ["amocrm", "crm", "api"],
