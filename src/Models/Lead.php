@@ -133,7 +133,7 @@ class Lead extends AbstractModel
         return empty($response['leads']['update']['errors']);
     }
 
-    public function batchUpdate(Lead $leads, $modified = 'now')
+    public function batchUpdate(array $leads, $modified = 'now')
     {
         $parameters = [
             'leads' => [
