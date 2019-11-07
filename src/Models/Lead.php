@@ -28,6 +28,7 @@ class Lead extends AbstractModel
      * @var array Список доступный полей для модели (исключая кастомные поля)
      */
     protected $fields = [
+        'id',
         'name',
         'date_create',
         'last_modified',
@@ -143,6 +144,7 @@ class Lead extends AbstractModel
 
         foreach ($leads as $lead){
             $leadData = $lead->getValues();
+            $leadData['id'] = $lead['id'];
             $leadData['last_modified'] = strtotime($modified);
             $parameters['leads']['update'][] = $leadData;
         }
