@@ -34,6 +34,7 @@ class Customer extends AbstractModel
         'tags',
         'next_date',
         'request_id',
+        'id'
     ];
 
     /**
@@ -118,5 +119,25 @@ class Customer extends AbstractModel
         $response = $this->postRequest('/private/api/v2/json/customers/set', $parameters);
 
         return isset($response['customers']) ? true : false;
+    }
+
+    public function batchUpdate(array $customers, $modified = 'now')
+    {
+        $parameters = [
+            'customers' => [
+                'update' => [],
+            ],
+        ];
+
+        foreach ($customers as $customer){
+            $customerData = $customer->getValues();
+            $customerData['id'] = $customer['id'];
+            $customerData['last_modified'] = strtotime($modified);
+            $parameters['leads']['update'][] = $customerData;
+        }
+
+        $response = $this->postRequest('/private/api/v2/json/customers/set', $parameters);
+
+        return empty($response['customers']['update']['errors']);
     }
 }
