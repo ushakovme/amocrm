@@ -133,11 +133,9 @@ class Customer extends AbstractModel
             $customerData = $customer->getValues();
             $customerData['id'] = $customer['id'];
             $customerData['last_modified'] = strtotime($modified);
-            $parameters['leads']['update'][] = $customerData;
+            $parameters['customers']['update'][] = $customerData;
         }
-
         $response = $this->postRequest('/private/api/v2/json/customers/set', $parameters);
-
         return empty($response['customers']['update']['errors']);
     }
 }

@@ -30,3 +30,5 @@ build/artifacts
 *.phar
 *.zip
 /phpunit.xml
+.env
+examples/customers-batch.php
