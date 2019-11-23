@@ -118,13 +118,10 @@ class Unsorted extends AbstractModel
 
         $response = $this->postRequest('/api/unsorted/accept/', $parameters);
 
-        if (isset($response['unsorted']['accept']['data'])) {
-            $result = array_keys($response['unsorted']['accept']['data']);
-        } else {
+        if (!isset($response['unsorted']['accept']['data'])) {
             return [];
         }
-
-        return count($uids) == 1 ? array_shift($result) : $result;
+        return $response['unsorted']['accept']['data'];
     }
 
     /**
